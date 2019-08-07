@@ -3,7 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 import { IObsFont, IObsInput, ObsInput } from './ObsInput';
 import { Multiselect } from 'vue-multiselect';
 import ObsFontSizeSelector from './ObsFontSizeSelector.vue';
-import fontManager from 'font-manager';
+// import fontManager from 'font-manager';
 import { EFontStyle } from 'obs-studio-node';
 
 /**
@@ -32,7 +32,7 @@ export default class ObsSystemFontSelector extends ObsInput<IObsInput<IObsFont>>
   @Prop()
   value: IObsInput<IObsFont>;
 
-  fonts: IFontDescriptor[] = fontManager.getAvailableFontsSync();
+  // fonts: IFontDescriptor[] = fontManager.getAvailableFontsSync();
 
   $refs: {
     family: HTMLInputElement;
@@ -167,13 +167,15 @@ export default class ObsSystemFontSelector extends ObsInput<IObsInput<IObsFont>>
   }
 
   get fontsByFamily() {
-    return _.groupBy(this.fonts, 'family');
+    // return _.groupBy(this.fonts, 'family');
+    return _;
   }
 
   get fontFamilies() {
     return _.sortBy(
       _.map(this.fontsByFamily, fonts => {
-        return this.fontsToFamily(fonts);
+        // return this.fontsToFamily(fonts);
+        return _;
       }),
       'family',
     );

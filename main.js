@@ -28,7 +28,7 @@ const semver = require('semver');
 const windowStateKeeper = require('electron-window-state');
 const obs = require('obs-studio-node');
 const pid = require('process').pid;
-const crashHandler = require('crash-handler');
+// const crashHandler = require('crash-handler');
 const electronLog = require('electron-log');
 
 if (process.argv.includes('--clearCacheDir')) {
@@ -87,20 +87,20 @@ function openDevTools() {
 function startApp() {
   const isDevMode = (process.env.NODE_ENV !== 'production') && (process.env.NODE_ENV !== 'test');
 
-  crashHandler.startCrashHandler(app.getAppPath());
-  crashHandler.registerProcess(pid, false);
+  // crashHandler.startCrashHandler(app.getAppPath());
+  // crashHandler.registerProcess(pid, false);
 
   { // Initialize obs-studio-server
     // Set up environment variables for IPC.
     process.env.SLOBS_IPC_PATH = "slobs-".concat(uuid());
     process.env.SLOBS_IPC_USERDATA = app.getPath('userData');
     // Host a new IPC Server and connect to it.
-    obs.IPC.host(process.env.SLOBS_IPC_PATH);
-    obs.NodeObs.SetWorkingDirectory(path.join(
-      app.getAppPath().replace('app.asar', 'app.asar.unpacked'),
-      'node_modules',
-      'obs-studio-node')
-    );
+    // obs.IPC.host(process.env.SLOBS_IPC_PATH);
+    // obs.NodeObs.SetWorkingDirectory(path.join(
+    //   app.getAppPath().replace('app.asar', 'app.asar.unpacked'),
+    //   'node_modules',
+    //   'obs-studio-node')
+    // );
   }
 
   const bt = require('backtrace-node');
@@ -204,13 +204,13 @@ function startApp() {
   });
 
   // Initialize the keylistener
-  require('node-libuiohook').startHook();
+  // require('node-libuiohook').startHook();
 
-  mainWindow.on('closed', () => {
-    require('node-libuiohook').stopHook();
-    session.defaultSession.flushStorageData();
-    app.quit();
-  });
+  // mainWindow.on('closed', () => {
+  //   require('node-libuiohook').stopHook();
+  //   session.defaultSession.flushStorageData();
+  //   app.quit();
+  // });
 
   // Pre-initialize the child window
   childWindow = new BrowserWindow({
@@ -289,7 +289,7 @@ function startApp() {
     // devtoolsInstaller.default(devtoolsInstaller.VUEJS_DEVTOOLS);
 
     // setTimeout(() => {
-      //openDevTools();
+      openDevTools();
     // }, 10 * 1000);
   }
 }

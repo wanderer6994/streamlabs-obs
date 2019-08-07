@@ -5,7 +5,7 @@ import { FontLibraryService } from 'services/font-library';
 import { AudioService } from 'services/audio';
 import { Inject } from '../../../util/injector';
 import * as obs from '../../../../obs-api';
-import * as fi from 'node-fontinfo';
+// import * as fi from 'node-fontinfo';
 import { ScenesService } from 'services/scenes';
 
 interface ISchema {
@@ -162,18 +162,18 @@ export class SourcesNode extends Node<ISchema, {}> {
       return;
     }
 
-    const fontInfo = fi.getFontInfo(settings.custom_font);
+    // const fontInfo = fi.getFontInfo(settings.custom_font);
 
-    if (!fontInfo) {
-      const source = this.sourcesService.getSource(item.id);
-      source.updateSettings({ font: settings.font });
-      return;
-    }
+    // if (!fontInfo) {
+    //   const source = this.sourcesService.getSource(item.id);
+    //   source.updateSettings({ font: settings.font });
+    //   return;
+    // }
 
-    settings['font']['face'] = fontInfo.family_name;
+    // settings['font']['face'] = fontInfo.family_name;
 
-    settings['font']['flags'] =
-      (fontInfo.italic ? obs.EFontStyle.Italic : 0) | (fontInfo.bold ? obs.EFontStyle.Bold : 0);
+    // settings['font']['flags'] =
+    //   (fontInfo.italic ? obs.EFontStyle.Italic : 0) | (fontInfo.bold ? obs.EFontStyle.Bold : 0);
 
     const source = this.sourcesService.getSource(item.id);
     source.updateSettings({ font: settings.font });
