@@ -1,7 +1,7 @@
 import electron from 'electron';
 import { Subject, Subscription } from 'rxjs';
 import { delay, take } from 'rxjs/operators';
-import overlay, { OverlayThreadStatus } from '@streamlabs/game-overlay';
+// import overlay, { OverlayThreadStatus } from '@streamlabs/game-overlay';
 import { Inject, InitAfter } from 'services/core';
 import { LoginLifecycle, UserService } from 'services/user';
 import { CustomizationService } from 'services/customization';
@@ -91,7 +91,7 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
   }
 
   async initializeOverlay() {
-    overlay.start();
+    // overlay.start();
 
     this.onWindowsReadySubscription = this.onWindowsReady
       .pipe(
@@ -201,7 +201,7 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
 
       this.windows[key].setBounds({ ...pos, ...size });
       this.previewWindows[key].setBounds({ ...pos, ...size });
-      overlay.setPosition(overlayId, pos.x, pos.y, size.width, size.height);
+      // overlay.setPosition(overlayId, pos.x, pos.y, size.width, size.height);
     });
   }
 
@@ -213,7 +213,7 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
   }
 
   showOverlay() {
-    overlay.show();
+    // overlay.show();
     this.TOGGLE_OVERLAY(true);
 
     // Force a refresh to trigger a paint event
@@ -221,14 +221,14 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
   }
 
   hideOverlay() {
-    overlay.hide();
+    // overlay.hide();
     this.TOGGLE_OVERLAY(false);
   }
 
   toggleOverlay() {
-    if (overlay.getStatus() !== OverlayThreadStatus.Running || !this.state.isEnabled) {
-      return;
-    }
+    // if (overlay.getStatus() !== OverlayThreadStatus.Running || !this.state.isEnabled) {
+    //   return;
+    // }
 
     if (this.state.previewMode) this.setPreviewMode(false);
 
@@ -260,7 +260,7 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
 
     const id = this.state.windowProperties[window].id;
 
-    overlay.setVisibility(id, this.state.windowProperties[window].enabled);
+    // overlay.setVisibility(id, this.state.windowProperties[window].enabled);
 
     if (!this.state.windowProperties[window].enabled) {
       this.previewWindows[window].hide();
@@ -284,7 +284,7 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
         this.SET_WINDOW_POSITION(key, { x, y });
         const { width, height } = win.getBounds();
 
-        await overlay.setPosition(overlayId, x, y, width, height);
+        // await overlay.setPosition(overlayId, x, y, width, height);
         win.hide();
       });
     }
@@ -296,7 +296,7 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
     Object.keys(this.windows).forEach(key => {
       const overlayId = this.state.windowProperties[key].id;
 
-      overlay.setTransparency(overlayId, percentage * 2.55);
+      // overlay.setTransparency(overlayId, percentage * 2.55);
     });
   }
 
@@ -307,7 +307,7 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
 
   async destroyOverlay() {
     if (this.state.isEnabled) {
-      await overlay.stop();
+      // await overlay.stop();
       if (this.onWindowsReadySubscription) await this.onWindowsReadySubscription.unsubscribe();
       if (this.windows) await Object.values(this.windows).forEach(win => win.destroy());
       if (this.previewWindows) {
@@ -319,40 +319,40 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
   }
 
   private createWindowOverlays() {
-    Object.keys(this.windows).forEach((key: string) => {
-      const win: electron.BrowserWindow = this.windows[key];
-      const overlayId = overlay.addHWND(win.getNativeWindowHandle());
+    // Object.keys(this.windows).forEach((key: string) => {
+    //   const win: electron.BrowserWindow = this.windows[key];
+      // const overlayId = overlay.addHWND(win.getNativeWindowHandle());
 
-      if (overlayId === -1 || overlayId == null) {
-        win.hide();
-        throw new Error('Error creating overlay');
-      }
+    //   if (overlayId === -1 || overlayId == null) {
+    //     win.hide();
+    //     throw new Error('Error creating overlay');
+    //   }
 
-      this.SET_WINDOW_ID(key, overlayId);
+    //   this.SET_WINDOW_ID(key, overlayId);
 
-      const position = this.getPosition(key, win);
-      const { width, height } = win.getBounds();
+    //   const position = this.getPosition(key, win);
+    //   const { width, height } = win.getBounds();
 
-      overlay.setPosition(overlayId, position.x, position.y, width, height);
-      overlay.setTransparency(overlayId, this.state.opacity * 2.55);
-      overlay.setVisibility(overlayId, this.state.windowProperties[key].enabled);
+    //   overlay.setPosition(overlayId, position.x, position.y, width, height);
+    //   overlay.setTransparency(overlayId, this.state.opacity * 2.55);
+    //   overlay.setVisibility(overlayId, this.state.windowProperties[key].enabled);
 
-      win.webContents.executeJavaScript(hideInteraction);
+    //   win.webContents.executeJavaScript(hideInteraction);
 
-      win.webContents.on('paint', (event, dirty, image) => {
-        if (
-          overlay.paintOverlay(
-            overlayId,
-            image.getSize().width,
-            image.getSize().height,
-            image.getBitmap(),
-          ) === 0
-        ) {
-          win.webContents.invalidate();
-        }
-      });
-      win.webContents.setFrameRate(1);
-    });
+    //   win.webContents.on('paint', (event, dirty, image) => {
+    //     if (
+    //       overlay.paintOverlay(
+    //         overlayId,
+    //         image.getSize().width,
+    //         image.getSize().height,
+    //         image.getBitmap(),
+    //       ) === 0
+    //     ) {
+    //       win.webContents.invalidate();
+    //     }
+    //   });
+    //   win.webContents.setFrameRate(1);
+    // });
   }
 
   private getPosition(key: string, win: electron.BrowserWindow) {

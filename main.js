@@ -51,7 +51,7 @@ if (!gotTheLock) {
   const semver = require('semver');
   const windowStateKeeper = require('electron-window-state');
   const pid = require('process').pid;
-  const crashHandler = require('crash-handler');
+  // const crashHandler = require('crash-handler');
 
   app.commandLine.appendSwitch('force-ui-direction', 'ltr');
 
@@ -130,8 +130,8 @@ if (!gotTheLock) {
   function startApp() {
     const isDevMode = (process.env.NODE_ENV !== 'production') && (process.env.NODE_ENV !== 'test');
 
-    crashHandler.startCrashHandler(app.getAppPath(), process.env.SLOBS_VERSION, isDevMode.toString());
-    crashHandler.registerProcess(pid, false);
+    // crashHandler.startCrashHandler(app.getAppPath(), process.env.SLOBS_VERSION, isDevMode.toString());
+    // crashHandler.registerProcess(pid, false);
 
     const Raven = require('raven');
 
@@ -222,10 +222,10 @@ if (!gotTheLock) {
     });
 
     // Initialize the keylistener
-    require('node-libuiohook').startHook();
+    // require('node-libuiohook').startHook();
 
     mainWindow.on('closed', () => {
-      require('node-libuiohook').stopHook();
+      // require('node-libuiohook').stopHook();
       session.defaultSession.flushStorageData();
       session.defaultSession.cookies.flushStore(() => app.quit());
     });
@@ -251,7 +251,7 @@ if (!gotTheLock) {
       }
     });
 
-    if (process.env.SLOBS_PRODUCTION_DEBUG) openDevTools();
+    openDevTools();
 
     // simple messaging system for services between windows
     // WARNING! the child window use synchronous requests and will be frozen
