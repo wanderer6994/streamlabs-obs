@@ -8,6 +8,7 @@ import io from 'socket.io-client';
 import { Subject } from 'rxjs';
 import { AppService } from 'services/app';
 import { IRecentEvent } from 'services/recent-events';
+import electron from 'electron';
 
 export type TSocketEvent =
   | IStreamlabelsSocketEvent
@@ -111,6 +112,14 @@ export class WebsocketService extends Service {
     });
   }
 
+  showError(error: string) {
+    electron.remote.dialog.showMessageBox(electron.remote.getCurrentWindow(), {
+      type: 'warning',
+      message: `Websocket error: ${error}`,
+      buttons: ['OK'],
+    });
+  }
+
   openSocketConnection() {
     if (!this.userService.isLoggedIn()) {
       console.warn('User must be logged in to make a socket connection');
@@ -134,10 +143,22 @@ export class WebsocketService extends Service {
 
         // These are useful for debugging
         this.socket.on('connect', () => this.log('Connection Opened'));
-        this.socket.on('connect_error', (e: any) => this.log('Connection Error', e));
-        this.socket.on('connect_timeout', () => this.log('Connection Timeout'));
-        this.socket.on('error', () => this.log('Error'));
-        this.socket.on('disconnect', () => this.log('Connection Closed'));
+        this.socket.on('connect_error', (e: any) => {
+          this.log('Connection Error', e);
+          this.showError('Connection Error');
+        });
+        this.socket.on('connect_timeout', () => {
+          this.log('Connection Timeout');
+          this.showError('Connection Timeout');
+        });
+        this.socket.on('error', () => {
+          this.log('Error');
+          this.showError('Error');
+        });
+        this.socket.on('disconnect', () => {
+          this.log('Connection Closed');
+          this.showError('Connection Closed');
+        });
 
         this.socket.on('event', (e: any) => {
           this.log('event', e);
