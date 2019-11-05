@@ -55,7 +55,9 @@ export default class ExtraSettings extends Vue {
   deleteCacheDir() {
     if (
       confirm(
-        $t('WARNING! You will lose all scenes, sources, and settings. This cannot be undone!'),
+        $t(
+          'WARNING! You will lose all stream and encoder settings. If you are logged in, your scenes and sources will be restored from the cloud. This cannot be undone.',
+        ),
       )
     ) {
       electron.remote.app.relaunch({ args: ['--clearCacheDir'] });
@@ -80,7 +82,11 @@ export default class ExtraSettings extends Vue {
 
   restartStreamlabelsSession() {
     this.streamlabelsService.restartSession().then(result => {
-      if (result) alert($t('Streamlabels session has been succesfully restarted!'));
+      if (result) {
+        electron.remote.dialog.showMessageBox({
+          message: $t('Streamlabels session has been succesfully restarted!'),
+        });
+      }
     });
   }
 

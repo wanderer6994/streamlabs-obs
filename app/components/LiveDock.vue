@@ -52,7 +52,7 @@
           <a
             @click="showEditStreamInfo"
             v-if="isTwitch || isMixer || (isYoutube && isStreaming) || isFacebook"
-            v-tooltip="editStreamInfoTooltip">
+            v-tooltip.right="editStreamInfoTooltip">
             <i class="icon-edit" />
           </a>
           <a
@@ -136,7 +136,7 @@
     padding: 0;
   }
 
-  @media (max-width: 1100px) {
+  @media (max-width: 1070px) {
     display: none;
   }
 }

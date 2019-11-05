@@ -108,10 +108,6 @@ export interface IPlatformService {
 
   fetchViewerCount: () => Promise<number>;
 
-  fetchStreamKey: () => Promise<string>;
-
-  fetchChannelInfo: () => Promise<IChannelInfo>;
-
   fetchUserInfo: () => Promise<IUserInfo>;
 
   putChannelInfo: (channelInfo: IChannelInfo) => Promise<boolean>;
@@ -124,9 +120,13 @@ export interface IPlatformService {
 
   afterGoLive?: (context?: StreamingContext) => Promise<void>;
 
-  prepopulateInfo: () => Promise<any>;
+  prepopulateInfo: () => Promise<IChannelInfo>;
 
   scheduleStream?: (startTime: string, info: IChannelInfo) => Promise<any>;
+
+  fetchNewToken: () => Promise<void>;
+
+  getHeaders: (req: IPlatformRequest, useToken: boolean | string) => Dictionary<string>;
 }
 
 export interface IPlatformAuth {
@@ -160,4 +160,8 @@ export function getPlatformService(platform: TPlatform): IPlatformService {
     mixer: MixerService.instance,
     facebook: FacebookService.instance,
   }[platform];
+}
+
+export interface IPlatformRequest extends RequestInit {
+  url: string;
 }

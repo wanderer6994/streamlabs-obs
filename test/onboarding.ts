@@ -69,8 +69,8 @@ test('OBS Importer', async t => {
   }
 
   // Complete onboarding
-  if (await t.context.app.client.isExisting('p=Skip')) {
-    await t.context.app.client.click('p=Skip');
+  if (await t.context.app.client.isExisting('button=Complete')) {
+    await t.context.app.client.click('button=Complete');
     await sleep(1000);
   }
 
@@ -86,7 +86,7 @@ test('OBS Importer', async t => {
   await switchCollection(t, 'Collection 2');
 
   // check settings
-  await client.click('.top-nav .icon-settings');
+  await client.click('.side-nav .icon-settings');
   await focusChild(t);
   await client.click('li=Output');
   t.is(await getFormInput(t, 'Video Bitrate'), '5000');
