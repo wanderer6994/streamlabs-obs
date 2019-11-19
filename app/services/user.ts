@@ -520,6 +520,8 @@ export class UserService extends PersistentStatefulService<IUserServiceState> {
     authWindow.webContents.on('did-navigate', async (e, url) => {
       const parsed = this.parseAuthFromUrl(url, merge);
 
+      console.log('REDIECT', url);
+
       if (parsed) {
         parsed.partition = partition;
         authWindow.close();
