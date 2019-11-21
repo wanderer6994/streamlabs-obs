@@ -128,16 +128,16 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
       webPreferences: { offscreen: true, nodeIntegration: true },
       isFullScreen: true,
     });
+    this.windows.recentEvents.webContents.openDevTools();
     this.windows.chat = new BrowserWindow({
       ...this.commonWindowOptions,
       height: 600,
       webPreferences: chatWebPrefences,
     });
-
     this.windows.chat.webContents.setAudioMuted(true);
-
     this.createPreviewWindows();
     await this.configureWindows();
+    this.windows.chat.webContents.openDevTools();
   }
 
   assignCommonWindowOptions() {
@@ -168,6 +168,7 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
       componentName: 'OverlayPlaceholder',
       title: $t('Recent Events'),
     });
+    this.previewWindows.recentEvents.webContents.openDevTools();
 
     this.previewWindows.chat = this.windowsService.createOneOffWindowForOverlay({
       ...this.commonWindowOptions,
@@ -179,6 +180,8 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
       componentName: 'OverlayPlaceholder',
       title: $t('Chat'),
     });
+
+    this.previewWindows.chat.webContents.openDevTools();
   }
 
   async configureWindows() {
