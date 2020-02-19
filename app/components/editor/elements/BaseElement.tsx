@@ -24,13 +24,13 @@ export default class BaseElement extends TsxComponent {
     if (this.interval) clearInterval(this.interval);
   }
 
-  get belowMinWarning() {
-    return (
-      <div class={styles.container}>
-        <span class={styles.empty}>{$t('This element is too small to be displayed')}</span>
-      </div>
-    );
-  }
+  // get belowMinWarning() {
+  //   return (
+  //     <div class={styles.container}>
+  //       <span class={styles.empty}>{$t('This element is too small to be displayed')}</span>
+  //     </div>
+  //   );
+  // }
 
   get element() {
     return <div />;
@@ -45,6 +45,6 @@ export default class BaseElement extends TsxComponent {
   }
 
   renderElement() {
-    return this.belowMins ? this.belowMinWarning : this.element;
+    return this.element;
   }
 }
